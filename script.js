@@ -1,11 +1,9 @@
-// 1. 관광지 데이터 (Datos Turísticos)
 const tourSpots = [
     { 
         id: 1, 
         title: 'Parque Urquiza', 
         category: 'naturaleza', 
         desc: 'El pulmón verde de la ciudad. Ideal para caminar y tomar unos mates frente al río.', 
-        // 공원, 나무 사진 랜덤
         img: 'https://loremflickr.com/640/480/park,trees' 
     },
     { 
@@ -13,7 +11,6 @@ const tourSpots = [
         title: 'Costanera de Paraná', 
         category: 'naturaleza', 
         desc: 'Disfrutá de una vista increíble del río Paraná. Perfecta para hacer deportes.', 
-        // 강, 물 사진 랜덤
         img: 'https://loremflickr.com/640/480/river,water' 
     },
     { 
@@ -21,7 +18,6 @@ const tourSpots = [
         title: 'Catedral de Paraná', 
         category: 'cultura', 
         desc: 'Un icono histórico frente a la Plaza 1º de Mayo. Arquitectura impresionante.', 
-        // 성당, 건축물 사진
         img: 'https://loremflickr.com/640/480/cathedral,architecture' 
     },
     { 
@@ -29,7 +25,6 @@ const tourSpots = [
         title: 'Parrillas & Asado', 
         category: 'gastronomia', 
         desc: 'No te podés ir sin probar un buen asado con vino Malbec.', 
-        // 바베큐, 고기 사진
         img: 'https://loremflickr.com/640/480/barbecue,steak' 
     },
     { 
@@ -37,7 +32,6 @@ const tourSpots = [
         title: 'Playa Thompson', 
         category: 'naturaleza', 
         desc: 'Sol, arena y río. El lugar favorito para pasar el verano con amigos.', 
-        // 해변, 모래 사진
         img: 'https://loremflickr.com/640/480/beach,sand' 
     },
     { 
@@ -45,12 +39,11 @@ const tourSpots = [
         title: 'Teatro 3 de Febrero', 
         category: 'cultura', 
         desc: 'El centro cultural más importante de la provincia. Una joya arquitectónica.', 
-        // 극장, 오페라 사진
         img: 'https://loremflickr.com/640/480/theater,opera' 
     },
 ];
 
-// 2. 화면 그리기 (Render)
+// 화면 그리기 (Render)
 const container = document.getElementById('spot-container');
 
 function drawSpots(data) {
@@ -73,7 +66,7 @@ function drawSpots(data) {
     });
 }
 
-// 3. 필터링 (Filtrar)
+// 필터링 
 function filterSpots(category) {
     if (category === 'all') {
         drawSpots(tourSpots);
@@ -83,10 +76,26 @@ function filterSpots(category) {
     }
 }
 
-// 4. 스크롤 이동
+// 스크롤 이동
 function scrollToSpots() {
     document.querySelector('.spots-section').scrollIntoView({ behavior: 'smooth' });
 }
+
+
+
+// 검색 기능 
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function() {
+    const keyword = searchInput.value.toLowerCase();
+
+    const searchResult = tourSpots.filter(spot => {
+        return spot.title.toLowerCase().includes(keyword) || 
+               spot.desc.toLowerCase().includes(keyword);
+    });
+
+    drawSpots(searchResult);
+});
 
 // 초기 실행
 drawSpots(tourSpots);

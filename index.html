@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Descubrí Paraná - Entre Ríos</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-content">
+        <h1>Paraná, Entre Ríos</h1>
+        <p>Naturaleza, río y paz en el corazón de Entre Ríos.</p>
+        <button class="cta-btn" onclick="scrollToSpots()">¡Conocé más!</button>
+      </div>
+    </header>
+
+    <section class="about">
+      <h2>Sobre la Ciudad</h2>
+      <p>
+        Disfrutá de los atardeceres mágicos sobre el río Paraná.<br />
+        Una ciudad llena de historia, parques verdes y la mejor gastronomía del
+        litoral.
+      </p>
+    </section>
+
+    <section class="sprots-section">
+      <h2>🔥 Lugares Imperdibles</h2>
+      <div class="filters">
+        <button onclick="filterSpots('all')">Todos</button>
+        <button onclick="filterSpots('naturaleza')">Naturaleza</button>
+        <button onclick="filterSpots('gastronomia')">Gastronomía</button>
+        <button onclick="filterSpots('cultura')">Cultura</button>
+      </div>
+
+      <div id="spot-container" class="grid-container"></div>
+    </section>
+
+    <footer>
+      <p>© 2025 Visit Paraná. Hecho con ♥ en Argentina.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

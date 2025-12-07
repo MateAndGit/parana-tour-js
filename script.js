@@ -81,6 +81,52 @@ function scrollToSpots() {
     document.querySelector('.spots-section').scrollIntoView({ behavior: 'smooth' });
 }
 
+// 날씨 기능
+// --- 날씨 API 연동 (Open-Meteo) ---
+
+// 파라나 좌표
+const LAT = -31.73;
+const LON = -60.51;
+
+async function getParanaWeather() {
+    try {
+        // 1. API 요청 보내기 (GET) - 섭씨(celsius) 기준, 현재 날씨만 가져오기
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&timezone=auto`;
+        
+        const response = await fetch(url);
+        const data = await response.json(); // JSON으로 변환
+
+        // 2. 필요한 데이터만 꺼내기
+        const temp = Math.round(data.current.temperature_2m); // 온도 (반올림)
+        const code = data.current.weather_code; // 날씨 상태 코드 (0: 맑음, 1~3: 흐림, 그외: 비/눈)
+
+        // 3. 날씨 코드에 따라 이모지랑 텍스트 정하기
+        let weatherStatus = '';
+        let icon = '';
+
+        if (code === 0) {
+            weatherStatus = 'Soleado'; // 맑음
+            icon = '☀️';
+        } else if (code >= 1 && code <= 3) {
+            weatherStatus = 'Nublado'; // 구름
+            icon = '☁️';
+        } else if (code >= 50) {
+            weatherStatus = 'Lluvia'; // 비
+            icon = '🌧️';
+        } else {
+            weatherStatus = 'Paraná'; // 그 외
+            icon = '🌡️';
+        }
+
+        // 4. HTML에 꽂아넣기
+        const weatherBox = document.getElementById('weather-box');
+        weatherBox.innerHTML = `${icon} ${temp}°C - ${weatherStatus}`;
+        
+    } catch (error) {
+        console.error("날씨를 못 가져왔어요 ㅠㅠ", error);
+        document.getElementById('weather-box').innerText = "Paraná, Entre Ríos";
+    }
+}
 
 
 // 검색 기능 
@@ -99,3 +145,4 @@ searchInput.addEventListener('input', function() {
 
 // 초기 실행
 drawSpots(tourSpots);
+getParanaWeather();

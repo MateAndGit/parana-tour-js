@@ -109,4 +109,43 @@ h2 { font-size: 2rem; margin-bottom: 30px; color: #2c3e50; }
 .card-title { font-size: 1.4rem; margin: 5px 0; }
 .card-desc { font-size: 0.9rem; color: #666; }
 
+/* 1. 카드를 기준점(relative)으로 설정 (중요!) */
+.card {
+    position: relative; /* 이게 있어야 하트가 카드 밖으로 안 나감 */
+    /* 기존 스타일 유지... */
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    text-align: left;
+}
+
+/* 2. 하트 버튼 스타일 */
+.like-btn {
+    position: absolute; /* 절대 위치 */
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.8); /* 반투명 흰색 배경 */
+    border: none;
+    border-radius: 50%; /* 동그랗게 */
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    z-index: 10; /* 이미지보다 위에 떠야 함 */
+}
+
+.like-btn:hover { transform: scale(1.1); } /* 마우스 올리면 커짐 */
+
+/* 3. 좋아요 눌렸을 때 (Active 상태) */
+.like-btn.liked {
+    color: red; /* 빨간 하트 */
+}
+
 footer { background: #333; color: white; padding: 20px; text-align: center; margin-top: 50px;}

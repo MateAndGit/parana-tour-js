@@ -146,3 +146,82 @@ searchInput.addEventListener('input', function() {
 // 초기 실행
 drawSpots(tourSpots);
 getParanaWeather();
+
+// --- [NEW] 즐겨찾기(찜) 관련 로직 ---
+
+// 1. 내 찜 목록 가져오기 (SELECT)
+function getLikedItems() {
+    // localStorage에서 'likedSpots'라는 키로 저장된 걸 가져옴
+    const stored = localStorage.getItem('likedSpots');
+    // 없으면 빈 배열([]), 있으면 JSON 문자열을 배열로 변환
+    return stored ? JSON.parse(stored) : [];
+}
+
+// 2. 찜 목록 저장하기 (INSERT / UPDATE)
+function saveLikedItems(items) {
+    // 배열을 JSON 문자열로 바꿔서 저장 (localStorage는 문자열만 저장 가능)
+    localStorage.setItem('likedSpots', JSON.stringify(items));
+}
+
+// 3. 하트 버튼 클릭 시 실행 (Toggle)
+function toggleLike(id) {
+    let likedItems = getLikedItems(); // 현재 찜 목록 가져오기
+
+    // 이미 찜했는지 확인 (contains)
+    if (likedItems.includes(id)) {
+        // 이미 있으면 -> 삭제 (Filter로 걸러냄)
+        likedItems = likedItems.filter(itemId => itemId !== id);
+    } else {
+        // 없으면 -> 추가 (Push)
+        likedItems.push(id);
+    }
+
+    // 변경된 목록 저장 (Commit)
+    saveLikedItems(likedItems);
+
+    // 화면 다시 그리기 (새로고침 없이 반영) -> 성능을 위해 버튼만 바꿀 수도 있지만 일단 쉽게 갑니다
+    // 현재 검색어나 필터 상태가 있다면 유지해야 하지만, 일단 전체 다시 그리기
+    // (더 완벽하게 하려면 현재 필터 상태를 저장하는 전역 변수가 필요합니다)
+    drawSpots(tourSpots); 
+}
+
+
+// --- 기존 화면 그리기 함수 수정 ---
+
+function drawSpots(data) {
+    const container = document.getElementById('spot-container');
+    container.innerHTML = ''; 
+
+    // [NEW] 찜 목록 미리 가져오기
+    const likedItems = getLikedItems();
+
+    data.forEach(spot => {
+        // [NEW] 이 관광지가 찜 목록에 있는지 확인
+        const isLiked = likedItems.includes(spot.id);
+        
+        // 찜 했으면 빨간 하트(❤️), 안 했으면 빈 하트(🤍)
+        // class에 'liked'가 있으면 CSS에서 빨간색으로 만듦
+        const heartIcon = isLiked ? '❤️' : '🤍';
+        const activeClass = isLiked ? 'liked' : '';
+
+        const catName = spot.category.charAt(0).toUpperCase() + spot.category.slice(1);
+
+        const html = `
+            <div class="card">
+                <!-- [NEW] 하트 버튼 추가 -->
+                <!-- onclick 이벤트로 자신의 ID를 넘김 -->
+                <button class="like-btn ${activeClass}" onclick="toggleLike(${spot.id})">
+                    ${heartIcon}
+                </button>
+
+                <img src="${spot.img}" alt="${spot.title}" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                <div class="card-info">
+                    <span class="card-cat">#${catName}</span>
+                    <h3 class="card-title">${spot.title}</h3>
+                    <p class="card-desc">${spot.desc}</p>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    });
+}
